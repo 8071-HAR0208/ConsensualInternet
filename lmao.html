@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LMAO</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+        }
+
+        video {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <video id="lmao" autoplay loop playsinline disablepictureinpicture
+           oncontextmenu="return false;">
+        <source src="lmao.mp4" type="video/mp4">
+    </video>
+
+    <script>
+        const video = document.getElementById("lmao");
+
+        video.addEventListener("pause", () => {
+            video.play().catch(() => {});
+        });
+
+        video.addEventListener("seeking", () => {
+            if (video.dataset.started && video.currentTime > video.dataset.playhead) {
+                video.currentTime = Number(video.dataset.playhead);
+            }
+        });
+
+        video.addEventListener("timeupdate", () => {
+            video.dataset.started = "true";
+            video.dataset.playhead = video.currentTime;
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === " " || event.key.startsWith("Arrow") || event.key === "MediaPlayPause") {
+                event.preventDefault();
+            }
+            video.play().catch(() => {});
+        });
+
+        document.addEventListener("pointerdown", () => {
+            video.play().catch(() => {});
+        }, { once: true });
+
+        video.play().catch(() => {});
+    </script>
+</body>
+</html>
